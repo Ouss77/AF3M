@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node check-env.js",
     "build": "next build",
     "export": "next export",
     "start": "next start"
@@ -15,7 +16,7 @@
     "@material-tailwind/react": "^2.1.10",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "emailjs-com": "^3.2.0",
     "formidable": "^3.5.2",
     "framer-motion": "^12.4.2",
