@@ -35,7 +35,7 @@ function ajouterUtilisateur() {
             if (response.ok) {
                 setMessage({ text: "Utilisateur ajouté avec succès", type: "success" });
                 setTimeout(() => {
-                    router.push("/admin_pages/modifierUtilisateur");
+                    router.push("/admin_pages/utilisateur");
                 }, 1500);
             } else {
                 setMessage({ text: "Erreur lors de l'ajout de l'utilisateur", type: "error" });

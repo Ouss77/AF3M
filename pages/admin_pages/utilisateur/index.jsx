@@ -3,6 +3,7 @@ import { LanguageContext } from "@/components/Context/LanguageContext";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { Users, Plus, Check, X } from "lucide-react";
 import Loading from "@/components/Loading";
+import { deleteUserById, getUsers, updateUser } from "@/utils/usersUtils";
 
 function ModifierUtilisateur() {
   const language = useContext(LanguageContext).language;
@@ -17,52 +18,30 @@ function ModifierUtilisateur() {
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => { 
+  const fetchUsers = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/getUsers.php`
-      );
-      const data = await response.json();
+      const data = await getUsers();
       setUsers(data);
-      setLoading(false);
     } catch (error) {
-
       setMessage({
         text: "An error occurred while fetching users.",
         type: "error",
       });
-
     } finally {
-
       setLoading(false);
     }
   };
 
   const deleteUser = async (id) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/deleteUser.php`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            id,
-            _method: 'DELETE' // Indicates this is a delete operation
-          }),
-        }
-      );
-  
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
+      const result = await deleteUserById(id);
+      if (result.success) {
         setUsers(users.filter((user) => user.id !== id));
         setMessage({ text: "User deleted successfully", type: "success" });
       } else {
-        setMessage({ 
-          text: result.message || "Failed to delete the user", 
-          type: "error" 
+        setMessage({
+          text: result.message || "Failed to delete the user",
+          type: "error",
         });
       }
     } catch (error) {
@@ -98,27 +77,7 @@ function ModifierUtilisateur() {
     };
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/editUser.php`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedUser),
-        }
-      );
-      let data;
-      try {
-        data = JSON.parse(text); // Attempt to parse the response as JSON
-      } catch (e) {
-        setMessage({
-          text: "An error occurred: Invalid response from server",
-          type: "error",
-        });
-        return;
-      }
-
+      const data = await updateUser(updatedUser);
       if (data.success) {
         setUsers(
           users.map((user) => (user.id === editingUserId ? updatedUser : user))
@@ -198,7 +157,7 @@ function ModifierUtilisateur() {
           <div className="flex justify-center">
             <button
               aria-label="Add User"
-              onClick={() => (window.location.href = "/admin_pages/ajouterUtilisateur")}
+              onClick={() => (window.location.href = "/admin_pages/utilisateur/ajouter")}
               className="group relative px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center"
             >
               <Plus className="w-5 h-5 mr-2" />
@@ -244,7 +203,7 @@ function ModifierUtilisateur() {
                     <td className="px-6 py-4">
                       {editingUserId === user.id ? (
                         <input
-                          type="password"
+                          type="text"
                           name="password"
                           value={editedUser.password}
                           onChange={handleEditChange}
@@ -252,7 +211,7 @@ function ModifierUtilisateur() {
                           placeholder={language === "fr" ? "Mot de passe" : "Password"}
                         />
                       ) : (
-                        <span className="text-gray-500 font-mono">••••••••</span>
+                        <span className="text-gray-700 font-mono">{user.password}</span>
                       )}
                     </td>
                     <td className="px-6 py-4">

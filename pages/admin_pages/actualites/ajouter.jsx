@@ -23,7 +23,7 @@ export default function AddActualite() {
     if (image) formData.append("image", image);
 
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/ajouterActualite.php`;
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/Actualites/ajouterActualite.php`;
       const response = await fetch(apiUrl, {
         method: "POST",
         body: formData,
@@ -31,7 +31,7 @@ export default function AddActualite() {
 
       if (response.ok) {
         setMessage("Actualité added successfully!");
-        router.push("/admin_pages/modifierActualite");
+        router.push("/admin_pages/actualites");
         setTitleFr("");
         setDescriptionFr("");
         setTitleEn("");

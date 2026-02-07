@@ -55,7 +55,7 @@ function Dashboard() {
 
     fetchData("getArticles_Count.php", setArticleCount);
     fetchData("getAuthors_Count.php", setAuthors);
-    fetchData("getActualites_Count.php", setActualitesCount);
+    fetchData("Actualites/getActualites_Count.php", setActualitesCount);
     fetchData("getThemes_Count.php", setThemes);
   }, []);
 
@@ -75,7 +75,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-5">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-0 ">
         {/* Header Section */}
         <div className="backdrop-blur-sm bg-white/80 rounded-2xl p-8 mb-8 border border-white/20">
           <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">

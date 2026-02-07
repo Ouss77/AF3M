@@ -69,7 +69,7 @@ function SideBar() {
             <SidebarButton
               icon={<Newspaper size={20} />}
               label={language === "fr" ? "Gestion des Actualités" : "Manage News"}
-              link="/admin_pages/modifierActualite"
+              link="/admin_pages/actualites"
               setIsOpen={setIsOpen}
             />
             
@@ -83,7 +83,7 @@ function SideBar() {
             <SidebarButton
               icon={<Users size={20} />}
               label={language === "fr" ? "Gestion des Utilisateurs" : "Manage Users"}
-              link="/admin_pages/modifierUtilisateur"
+              link="/admin_pages/utilisateur"
               setIsOpen={setIsOpen}
             />
 

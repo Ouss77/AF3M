@@ -16,7 +16,7 @@ export default function CarouselActualite() {
     const fetchActualites = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/getActualite.php`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/Actualites/getActualite.php`
         );
         setActualites(response.data);
       } catch (error) {
