@@ -7,6 +7,7 @@ import Link from "next/link";
 import Hamburger from "./Hamburger";
 import { LanguageContext } from "./Context/LanguageContext";
 import SwitchLanguage from "./SwitchLanguage";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -105,8 +106,8 @@ const Navbar = () => {
     <header 
       className={`fixed z-50 w-full transition-all duration-300 ${
         scrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-lg h-16' 
-          : 'bg-gradient-to-r from-blue-50 via-white to-blue-50 backdrop-blur-sm shadow-md h-20'
+          ? 'bg-white/95 backdrop-blur-md shadow-lg h-16 dark:bg-slate-950/95 dark:shadow-slate-950/80' 
+          : 'bg-gradient-to-r from-blue-50 via-white to-blue-50 backdrop-blur-sm shadow-md h-20 dark:bg-slate-950/95 dark:shadow-slate-950/80'
       }`}
     >
       <div className="flex justify-between items-center px-4 sm:px-6 lg:px-12 xl:px-16 h-full">
@@ -145,7 +146,7 @@ const Navbar = () => {
         <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
           <Link
             href="/actualites"
-            className="relative text-sm xl:text-base text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 group"
+            className="relative text-sm xl:text-base text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 group dark:text-slate-200 dark:hover:text-sky-300 dark:hover:bg-slate-800"
           >
             {translations[language].news}
             <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-300 group-hover:w-3/4 rounded-full"></span>
@@ -171,7 +172,7 @@ const Navbar = () => {
 
           <Link
             href="/JetCommunication/communications"
-            className="relative text-sm xl:text-base text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 group"
+            className="relative text-sm xl:text-base text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 group dark:text-slate-200 dark:hover:text-sky-300 dark:hover:bg-slate-800"
           >
             {translations[language].communications}
             <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-300 group-hover:w-3/4 rounded-full"></span>
@@ -189,6 +190,7 @@ const Navbar = () => {
 
         {/* Right Controls */}
         <div className="flex items-center gap-3">
+          <ThemeSwitcher />
           <SwitchLanguage />
 
           {/* Mobile Menu Button */}

@@ -2,7 +2,8 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Dropdown from "./Dropdown";
 import Image from "next/image";
-import { FaChevronDown, FaNewspaper, FaUsers, FaCalendar, FaClipboard, FaGlobe } from "react-icons/fa";
+import { FaChevronDown, FaNewspaper, FaUsers, FaCalendar, FaClipboard, FaGlobe, FaSun, FaMoon } from "react-icons/fa";
+import { useTheme } from "./Context/ThemeContext";
 
 function Hamburger({
   translations,
@@ -18,6 +19,8 @@ function Hamburger({
   switchLanguage,
 }) {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
 
   const handleLanguageSwitch = (lang) => {
     switchLanguage(lang);
@@ -99,6 +102,28 @@ function Hamburger({
           ))}
 
           {/* Divider */}
+          <div className="relative py-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-600/50"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <span className="px-3 bg-slate-800 text-xs text-slate-400 uppercase tracking-wider">
+                {language === "fr" ? "Thème" : "Theme"}
+              </span>
+            </div>
+          </div>
+
+          <button
+            aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+            onClick={toggleTheme}
+            className="group flex items-center gap-3 w-full text-white hover:text-blue-400 py-3 px-4 rounded-xl hover:bg-slate-700/50 font-medium transition-all duration-300 border-l-4 border-transparent hover:border-blue-400"
+          >
+            <div className="flex-shrink-0 w-10 h-10 bg-slate-700/50 rounded-lg flex items-center justify-center group-hover:bg-blue-600/30 transition-all duration-300">
+              {isDark ? <FaMoon className="w-5 h-5" /> : <FaSun className="w-5 h-5" />}
+            </div>
+            <span>{isDark ? (language === "fr" ? "Sombre" : "Dark") : (language === "fr" ? "Clair" : "Light")}</span>
+          </button>
+
           <div className="relative py-4">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-600/50"></div>
