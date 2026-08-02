@@ -12,11 +12,38 @@ export default function ArticlesTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAbstract, setShowAbstract] = useState({});
   const [selectedYear, setSelectedYear] = useState("All");
+  const [downloadError, setDownloadError] = useState({});
+  const [downloadLoading, setDownloadLoading] = useState({});
   const { language } = useContext(LanguageContext);
 
   useEffect(() => {
     fetchArticles(setArticles, setFilteredArticles, setLoading, setError);
   }, []);
+
+  const handleDownload = async (event, fileName) => {
+    event.preventDefault();
+    const key = fileName || "default";
+    setDownloadError((prev) => ({ ...prev, [key]: null }));
+    setDownloadLoading((prev) => ({ ...prev, [key]: true }));
+
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/pdf_files/${fileName}`;
+    try {
+      const response = await fetch(url, { method: "HEAD" });
+      if (!response.ok) {
+        throw new Error("Fichier introuvable");
+      }
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      setDownloadError((prev) => ({
+        ...prev,
+        [key]: language === "fr"
+          ? "Le fichier PDF est introuvable ou a été supprimé. Veuillez contacter l'administrateur."
+          : "The PDF file could not be found or has been removed. Please contact the administrator."
+      }));
+    } finally {
+      setDownloadLoading((prev) => ({ ...prev, [key]: false }));
+    }
+  };
 
   const toggleAbstract = (index) => {
     setShowAbstract((prevState) => ({
@@ -187,15 +214,22 @@ export default function ArticlesTable() {
                       : (language === "fr" ? "Afficher le résumé" : "Show Abstract")}
                   </button>
                   
-                  <a
-                    href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/pdf_files/${article.pdf_files}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-                  >
-                    <FaDownload className="w-4 h-4" />
-                    {language === "fr" ? "Télécharger PDF" : "Download PDF"}
-                  </a>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={(e) => handleDownload(e, article.pdf_files)}
+                      disabled={downloadLoading[article.pdf_files]}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      <FaDownload className="w-4 h-4" />
+                      {downloadLoading[article.pdf_files]
+                        ? language === "fr" ? "Vérification..." : "Checking..."
+                        : language === "fr" ? "Télécharger PDF" : "Download PDF"}
+                    </button>
+                    {downloadError[article.pdf_files] && (
+                      <p className="text-sm text-red-600">{downloadError[article.pdf_files]}</p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Abstract */}
