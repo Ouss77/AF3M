@@ -17,10 +17,37 @@ export default function ArticlesTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [expandedRows, setExpandedRows] = useState({});
+  const [downloadError, setDownloadError] = useState({});
+  const [downloadLoading, setDownloadLoading] = useState({});
 
   useEffect(() => {
     fetchArticles(setArticles, setFilteredArticles, setLoading);
   }, []);
+
+  const handleDownload = async (event, fileName) => {
+    event.preventDefault();
+    const key = fileName || "default";
+    setDownloadError((prev) => ({ ...prev, [key]: null }));
+    setDownloadLoading((prev) => ({ ...prev, [key]: true }));
+
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/pdf_files/${fileName}`;
+    try {
+      const response = await fetch(url, { method: "HEAD" });
+      if (!response.ok) {
+        throw new Error("Fichier introuvable");
+      }
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      setDownloadError((prev) => ({
+        ...prev,
+        [key]: language === "fr"
+          ? "Le fichier PDF est introuvable ou a été supprimé. Veuillez contacter l'administrateur."
+          : "The PDF file could not be found or has been removed. Please contact the administrator."
+      }));
+    } finally {
+      setDownloadLoading((prev) => ({ ...prev, [key]: false }));
+    }
+  };
 
   const handleMouseEnter = async (themeID, article_id, annee) => {
     try {
@@ -96,7 +123,6 @@ export default function ArticlesTable() {
 
       <section className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white min-h-screen">
         <div className="max-w-8xl mx-auto">
-          
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-2xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-yellow-500 mb-3">
@@ -256,15 +282,22 @@ export default function ArticlesTable() {
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-700 hidden md:table-cell">{article.authors}</td>
                       <td className="px-4 py-4 text-center">
-                        <a
-                          href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/pdf_files/${article.pdf_files}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-xs font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-                        >
-                          <FaDownload className="w-3 h-3" />
-                          {language === "fr" ? "Télécharger" : "Download"}
-                        </a>
+                        <div className="flex flex-col items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => handleDownload(e, article.pdf_files)}
+                            disabled={downloadLoading[article.pdf_files]}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-xs font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+                          >
+                            <FaDownload className="w-3 h-3" />
+                            {downloadLoading[article.pdf_files]
+                              ? language === "fr" ? "Vérification..." : "Checking..."
+                              : language === "fr" ? "Télécharger" : "Download"}
+                          </button>
+                          {downloadError[article.pdf_files] && (
+                            <p className="text-xs text-red-600 text-center">{downloadError[article.pdf_files]}</p>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
