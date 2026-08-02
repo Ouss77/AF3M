@@ -5,6 +5,7 @@ import Footer from "../src/components/Footer";
 import SideBar from "../src/components/SideBar";
 import { AuthProvider, useLogin } from "../src/components/Context/AuthContext";
 import { LanguageProvider } from "@/components/Context/LanguageContext";
+import { ThemeProvider } from "@/components/Context/ThemeContext";
 import styles from "../src/styles/globals.css";
 import Loading from "@/components/Loading";
 
@@ -51,10 +52,12 @@ function MyApp({ Component, pageProps }) {
 
 export default function AppWithProvider(props) {
   return (
-    <LanguageProvider> 
-      <AuthProvider>
-        <MyApp {...props} />
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <MyApp {...props} />
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }

@@ -30,7 +30,7 @@ function SwitchLanguage() {
       <button
         aria-label="Switch language"
         onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-        className="group relative flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 transition-all duration-300 border-2 border-transparent hover:border-blue-200"
+        className="group relative flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 transition-all duration-300 border-2 border-transparent hover:border-blue-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 dark:hover:border-slate-600"
       >
         {/* Current Language Flags */}
         <div className="flex items-center gap-2">
@@ -56,7 +56,7 @@ function SwitchLanguage() {
 
       {/* Dropdown Menu */}
       {isLanguageDropdownOpen && (
-        <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-50 animate-fade-in">
+        <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-50 animate-fade-in dark:bg-slate-900 dark:border-slate-700">
           <div className="p-2">
             {/* French Option */}
             <button 
@@ -64,7 +64,7 @@ function SwitchLanguage() {
               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 group ${
                 language === "fr" 
                   ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-md" 
-                  : "hover:bg-gray-50 text-gray-700"
+                  : "hover:bg-gray-50 text-gray-700 dark:hover:bg-slate-700 dark:text-slate-100"
               }`}
               onClick={() => handleLanguageSwitch("fr")}
             >
@@ -93,7 +93,7 @@ function SwitchLanguage() {
               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 group mt-1 ${
                 language === "en" 
                   ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-md" 
-                  : "hover:bg-gray-50 text-gray-700"
+                  : "hover:bg-gray-50 text-gray-700 dark:hover:bg-slate-700 dark:text-slate-100"
               }`}
               onClick={() => handleLanguageSwitch("en")}
             >

@@ -7,15 +7,20 @@
   --foreground: #171717;
 }
 
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+html {
+  font-size: 16px; /* Or any value you prefer */
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-html{
-  font-size: 16px; /* Or any value you prefer */
-
 }
 body {
   color: var(--foreground);
@@ -23,6 +28,60 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1rem; /* Ensures 1rem = 16px */
 
+}
+.dark [class*="bg-white"],
+.dark [class*="bg-gray-50"],
+.dark [class*="bg-slate-50"],
+.dark [class*="bg-slate-100"],
+.dark [class*="bg-gray-100"],
+.dark [class*="bg-slate-200"],
+.dark [class*="bg-blue-50"],
+.dark [class*="bg-indigo-50"],
+.dark [class*="bg-purple-100"],
+.dark [class*="bg-yellow-50"],
+.dark [class*="bg-green-50"],
+.dark [class*="from-white"],
+.dark [class*="from-blue-50"],
+.dark [class*="from-gray-50"],
+.dark [class*="from-indigo-50"],
+.dark [class*="from-purple-100"],
+.dark [class*="to-white"],
+.dark [class*="to-blue-50"],
+.dark [class*="to-gray-50"],
+.dark [class*="via-white"] {
+  background-image: none !important;
+  background-color: #0f172a !important;
+}
+.dark [class*="border-gray-100"],
+.dark [class*="border-gray-200"],
+.dark [class*="border-gray-300"],
+.dark [class*="border-slate-200"],
+.dark [class*="border-white/20"],
+.dark [class*="border-white/10"] {
+  border-color: #334155 !important;
+}
+.dark [class*="text-gray-700"],
+.dark [class*="text-gray-800"],
+.dark [class*="text-gray-900"],
+.dark [class*="text-slate-700"],
+.dark [class*="text-slate-900"],
+.dark [class*="text-gray-600"] {
+  color: #e2e8f0 !important;
+}
+.dark [class*="text-gray-400"],
+.dark [class*="text-slate-400"],
+.dark [class*="text-slate-500"] {
+  color: #94a3b8 !important;
+}
+.dark [class*="hover:bg-gray-50"]:hover,
+.dark [class*="hover:bg-white/50"]:hover,
+.dark [class*="hover:bg-white/20"]:hover,
+.dark [class*="hover:bg-slate-700/50"]:hover,
+.dark [class*="hover:bg-slate-700/70"]:hover {
+  background-color: #1f2937 !important;
+}
+.dark .bg-white\/20 {
+  background-color: rgba(15, 23, 42, 0.20) !important;
 }
 .table-header {
   @apply px-4 py-3 text-left text-lg font-bold border-r;
