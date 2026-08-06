@@ -7,6 +7,7 @@ export default function ajouterArticle() {
     theme: "",
     resume: "",
     author_name: "",
+    pdf_files: "",
   });
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -230,6 +231,19 @@ export default function ajouterArticle() {
                 />
               </div>
 
+              <div>
+                <label className="block text-slate-700 font-semibold mb-2">Fichier PDF</label>
+                <input
+                  type="text"
+                  name="pdf_files"
+                  value={formData.pdf_files}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-slate-50/50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 outline-none text-slate-800 placeholder-slate-400"
+                  placeholder="Nom du fichier PDF, ex: document.pdf"
+                />
+                <p className="text-xs text-slate-400 mt-2">Entrez le nom du fichier PDF disponible dans /pdf_files.</p>
+              </div>
+
               <button
                 aria-label="Submit"
                 type="submit"
@@ -326,6 +340,7 @@ export default function ajouterArticle() {
                       <li>• Colonne C: Thème</li>
                       <li>• Colonne D: Résumé</li>
                       <li>• Colonne E: Nom de l'auteur</li>
+                      <li>• Colonne F: Nom du fichier PDF (`pdf_files`)</li>
                     </ul>
                   </div>
                 </div>
