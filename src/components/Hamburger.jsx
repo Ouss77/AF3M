@@ -67,22 +67,38 @@ function Hamburger({
   ];
 
   return (
-    <div className="lg:hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 max-h-[calc(100vh-5rem)] overflow-y-auto">
-      <div className="p-4 sm:p-6">
+    <div className="lg:hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-slate-200/80 bg-white/85 backdrop-blur-xl text-slate-800 shadow-inner dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-100">
+      <div className="px-4 py-4 sm:px-6 sm:py-6">
+        <div className="mb-4 rounded-2xl border border-slate-200/80 bg-slate-50/90 p-3 shadow-sm dark:border-slate-700/80 dark:bg-slate-800/70">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
+                {language === "fr" ? "Navigation" : "Navigation"}
+              </p>
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                {language === "fr" ? "Menu principal" : "Main menu"}
+              </h3>
+            </div>
+            <div className="rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+              AF3M
+            </div>
+          </div>
+        </div>
+
         <nav className="space-y-2">
           {menuItems.map((item, index) => (
             item.type === "link" ? (
               <Link
                 key={index}
                 href={item.href}
-                className="group flex items-center gap-4 text-base sm:text-lg text-white hover:text-blue-400 transition-all duration-300 font-medium py-3 px-4 rounded-xl hover:bg-slate-700/50 border-l-4 border-transparent hover:border-blue-400"
+                className="group flex items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-base font-medium text-slate-700 transition-all duration-200 hover:border-blue-300 hover:bg-blue-50/80 hover:text-blue-600 dark:text-slate-100 dark:hover:border-blue-500 dark:hover:bg-slate-800/80 dark:hover:text-blue-300"
                 onClick={toggleMenu}
               >
-                <div className="flex-shrink-0 w-10 h-10 bg-slate-700/50 rounded-lg flex items-center justify-center group-hover:bg-blue-600/30 transition-all duration-300">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-all duration-200 group-hover:bg-blue-100 group-hover:text-blue-600 dark:bg-slate-700/70 dark:text-slate-300 dark:group-hover:bg-blue-500/20 dark:group-hover:text-blue-300">
                   {item.icon}
                 </div>
                 <span className="flex-1">{language === "fr" ? item.labelFr : item.labelEn}</span>
-                <div className="w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="h-2.5 w-2.5 rounded-full bg-blue-400 opacity-0 transition-opacity group-hover:opacity-100" />
               </Link>
             ) : (
               <div key={index} className="relative">
@@ -100,111 +116,69 @@ function Hamburger({
               </div>
             )
           ))}
+        </nav>
 
-          {/* Divider */}
-          <div className="relative py-4">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-600/50"></div>
+        <div className="mt-5 rounded-2xl border border-slate-200/80 bg-slate-50/90 p-3 shadow-sm dark:border-slate-700/80 dark:bg-slate-800/70">
+          <div className="mb-3 flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300">
+              {isDark ? <FaMoon className="w-4 h-4" /> : <FaSun className="w-4 h-4" />}
             </div>
-            <div className="relative flex justify-center">
-              <span className="px-3 bg-slate-800 text-xs text-slate-400 uppercase tracking-wider">
-                {language === "fr" ? "Thème" : "Theme"}
-              </span>
+            <div>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                {language === "fr" ? "Préférences" : "Preferences"}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {language === "fr" ? "Thème et langue" : "Theme and language"}
+              </p>
             </div>
           </div>
 
           <button
             aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
             onClick={toggleTheme}
-            className="group flex items-center gap-3 w-full text-white hover:text-blue-400 py-3 px-4 rounded-xl hover:bg-slate-700/50 font-medium transition-all duration-300 border-l-4 border-transparent hover:border-blue-400"
+            className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-left text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-blue-400 hover:bg-blue-50/70 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:border-blue-500 dark:hover:bg-slate-700/70 dark:hover:text-blue-300"
           >
-            <div className="flex-shrink-0 w-10 h-10 bg-slate-700/50 rounded-lg flex items-center justify-center group-hover:bg-blue-600/30 transition-all duration-300">
-              {isDark ? <FaMoon className="w-5 h-5" /> : <FaSun className="w-5 h-5" />}
-            </div>
-            <span>{isDark ? (language === "fr" ? "Sombre" : "Dark") : (language === "fr" ? "Clair" : "Light")}</span>
+            <span className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                {isDark ? <FaMoon className="w-4 h-4" /> : <FaSun className="w-4 h-4" />}
+              </span>
+              <span>{isDark ? (language === "fr" ? "Mode sombre" : "Dark mode") : (language === "fr" ? "Mode clair" : "Light mode")}</span>
+            </span>
+            <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+              {isDark ? (language === "fr" ? "ON" : "ON") : (language === "fr" ? "OFF" : "OFF")}
+            </span>
           </button>
 
-          <div className="relative py-4">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-600/50"></div>
-            </div>
-            <div className="relative flex justify-center">
-              <span className="px-3 bg-slate-800 text-xs text-slate-400 uppercase tracking-wider">
-                {language === "fr" ? "Langue" : "Language"}
-              </span>
-            </div>
-          </div>
-
-          {/* Language Switcher */}
-          <div className="relative">
+          <div className="mt-3 grid grid-cols-2 gap-2">
             <button
-              aria-label="Language Dropdown"
-              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-              className="group flex items-center gap-4 w-full text-white hover:text-blue-400 py-3 px-4 rounded-xl hover:bg-slate-700/50 font-medium transition-all duration-300 border-l-4 border-transparent hover:border-blue-400"
+              aria-label="French"
+              onClick={() => handleLanguageSwitch("fr")}
+              className={`flex items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                language === "fr"
+                  ? "border-blue-400 bg-blue-600 text-white shadow-sm"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:bg-slate-700"
+              }`}
             >
-              <div className="flex-shrink-0 w-10 h-10 bg-slate-700/50 rounded-lg flex items-center justify-center group-hover:bg-blue-600/30 transition-all duration-300">
-                <FaGlobe className="w-5 h-5" />
-              </div>
-              <div className="flex items-center gap-2 flex-1">
-                <Image src="/img/france.png" width={24} height={24} className="rounded" alt="French" />
-                <span className="text-slate-400">/</span>
-                <Image src="/img/uk.png" width={24} height={24} className="rounded" alt="English" />
-              </div>
-              <span className={`transition-transform duration-300 ${isLanguageDropdownOpen ? "rotate-180" : "rotate-0"}`}>
-                <FaChevronDown className="w-4 h-4" />
-              </span>
+              <Image src="/img/france.png" width={18} height={18} className="rounded-full" alt="French" />
+              <span>Français</span>
             </button>
-
-            {isLanguageDropdownOpen && (
-              <div className="mt-2 ml-4 space-y-1 bg-slate-800/80 backdrop-blur-sm rounded-xl border border-slate-600/50 overflow-hidden shadow-xl animate-fade-in">
-                <button
-                  aria-label="French"
-                  className={`w-full text-left px-4 py-3 transition-all duration-200 flex items-center gap-3 ${
-                    language === "fr" 
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg" 
-                      : "text-slate-300 hover:bg-slate-700/70 hover:text-white"
-                  }`}
-                  onClick={() => handleLanguageSwitch("fr")}
-                >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    language === "fr" ? "bg-white/20" : "bg-slate-700"
-                  }`}>
-                    <Image src="/img/france.png" width={20} height={20} alt="French" />
-                  </div>
-                  <span className="font-medium">Français</span>
-                  {language === "fr" && (
-                    <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse" />
-                  )}
-                </button>
-                <button
-                  aria-label="English"
-                  className={`w-full text-left px-4 py-3 transition-all duration-200 flex items-center gap-3 ${
-                    language === "en" 
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg" 
-                      : "text-slate-300 hover:bg-slate-700/70 hover:text-white"
-                  }`}
-                  onClick={() => handleLanguageSwitch("en")}
-                >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    language === "en" ? "bg-white/20" : "bg-slate-700"
-                  }`}>
-                    <Image src="/img/uk.png" width={20} height={20} alt="English" />
-                  </div>
-                  <span className="font-medium">English</span>
-                  {language === "en" && (
-                    <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse" />
-                  )}
-                </button>
-              </div>
-            )}
+            <button
+              aria-label="English"
+              onClick={() => handleLanguageSwitch("en")}
+              className={`flex items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                language === "en"
+                  ? "border-blue-400 bg-blue-600 text-white shadow-sm"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:border-blue-500 dark:hover:bg-slate-700"
+              }`}
+            >
+              <Image src="/img/uk.png" width={18} height={18} className="rounded-full" alt="English" />
+              <span>English</span>
+            </button>
           </div>
-        </nav>
+        </div>
 
-        {/* Footer Info */}
-        <div className="mt-6 pt-6 border-t border-slate-600/50">
-          <p className="text-xs text-slate-400 text-center">
-            AF3M © 2024
-          </p>
+        <div className="mt-5 flex items-center justify-center rounded-2xl border border-slate-200/70 bg-white/70 px-3 py-2 text-center text-xs text-slate-500 shadow-sm dark:border-slate-700/70 dark:bg-slate-800/70 dark:text-slate-400">
+          AF3M © 2024 • {language === "fr" ? "Association des mécaniciens et matériaux" : "Association of mechanics and materials"}
         </div>
       </div>
     </div>

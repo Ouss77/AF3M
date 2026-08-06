@@ -6,7 +6,7 @@ import axios from "axios";
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/Actualites/getActualite.php`);
       const data = response.data;
       setActualites(data);
-    } catch (err) {
+    } catch (err) { 
       setError(err.message);
     } finally {
      setLoading(false); 
