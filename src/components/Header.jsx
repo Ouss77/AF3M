@@ -209,7 +209,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl border-t border-slate-700 animate-fade-in">
+        <div className="lg:hidden absolute top-full left-0 w-full bg-gradient-to-b from-white via-slate-50 to-white shadow-2xl border-t border-slate-200 animate-fade-in dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 dark:border-slate-700">
           <Hamburger 
             translations={translations[language]}
             toggleMenu={toggleMenu}
