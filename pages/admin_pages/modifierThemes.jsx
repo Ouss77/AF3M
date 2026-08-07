@@ -11,6 +11,7 @@ function ModifierThemes() {
   const [selectedYear, setSelectedYear] = useState("");
   const [editMode, setEditMode] = useState(null);
   const [editedThemeName, setEditedThemeName] = useState("");
+  const [editedThemeCode, setEditedThemeCode] = useState("");
   const [message, setMessage] = useState({ text: "", type: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,16 +47,18 @@ function ModifierThemes() {
         {
           themeID: id,
           themeName: editedThemeName,
+          themeCode: editedThemeCode,
           _method: "PUT",
         }
       );
 
       setThemes(themes.map(t =>
-        t.themeID === id ? { ...t, themeName: editedThemeName } : t
+        t.themeID === id ? { ...t, themeName: editedThemeName, themeCode: editedThemeCode } : t
       ));
 
       setEditMode(null);
       setEditedThemeName("");
+      setEditedThemeCode("");
       setMessage({ text: "Theme modified successfully", type: "success" });
 
     } catch (err) {
@@ -66,14 +69,16 @@ function ModifierThemes() {
     }
   };
 
-  const enterEditMode = (id, name) => {
+  const enterEditMode = (id, name, code) => {
     setEditMode(id);
     setEditedThemeName(name);
+    setEditedThemeCode(code || "");
   };
 
   const cancelEdit = () => {
     setEditMode(null);
     setEditedThemeName("");
+    setEditedThemeCode("");
   };
 
   if (loading) {
@@ -180,6 +185,9 @@ function ModifierThemes() {
                   <th className="px-6 py-4 text-left">
                     {language === "fr" ? "Nom" : "Name"}
                   </th>
+                  <th className="px-6 py-4 text-left">
+                    {language === "fr" ? "Code" : "Code"}
+                  </th>
                   <th className="px-6 py-4 text-center">Actions</th>
                 </tr>
               </thead>
@@ -206,6 +214,18 @@ function ModifierThemes() {
                       )}
                     </td>
 
+                    <td className="px-6 py-4">
+                      {editMode === theme.themeID ? (
+                        <input
+                          className="border rounded-lg px-3 py-2 w-full"
+                          value={editedThemeCode}
+                          onChange={(e) => setEditedThemeCode(e.target.value)}
+                        />
+                      ) : (
+                        theme.themeCode || "—"
+                      )}
+                    </td>
+
                     <td className="px-6 py-4 text-center">
                       {editMode === theme.themeID ? (
                         <div className="flex justify-center gap-2">
@@ -225,7 +245,7 @@ function ModifierThemes() {
                       ) : (
                         <button
                           onClick={() =>
-                            enterEditMode(theme.themeID, theme.themeName)
+                            enterEditMode(theme.themeID, theme.themeName, theme.themeCode)
                           }
                           className="px-4 py-2 bg-blue-500 text-white rounded-lg"
                         >

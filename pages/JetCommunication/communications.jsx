@@ -2,6 +2,7 @@ import Head from "next/head";
 import React, { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "@/components/Context/LanguageContext";
 import { fetchArticles, handleSearch, handleYearChange, handleSort } from "@/utils/articleUtils";
+import { fetchThemes, buildThemeMap } from "@/utils/themeUtils";
 import { FaSearch, FaDownload, FaList, FaCalendarAlt, FaBook, FaUser, FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 
 export default function ArticlesTable() {
@@ -11,7 +12,7 @@ export default function ArticlesTable() {
   const [articles, setArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [selectedYear, setSelectedYear] = useState("All");
-  const [hoveredTheme, setHoveredTheme] = useState({ id: null, name: "" });
+  const [hoveredTheme, setHoveredTheme] = useState({ id: null, article_id: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,9 +20,11 @@ export default function ArticlesTable() {
   const [expandedRows, setExpandedRows] = useState({});
   const [downloadError, setDownloadError] = useState({});
   const [downloadLoading, setDownloadLoading] = useState({});
+  const [themeMap, setThemeMap] = useState({});
 
   useEffect(() => {
     fetchArticles(setArticles, setFilteredArticles, setLoading);
+    fetchThemes().then((themes) => setThemeMap(buildThemeMap(themes))).catch(() => {});
   }, []);
 
   const handleDownload = async (event, fileName) => {
@@ -49,20 +52,12 @@ export default function ArticlesTable() {
     }
   };
 
-  const handleMouseEnter = async (themeID, article_id, annee) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/getTheme.php?themeID=${themeID}&annee=${annee}`
-      );
-      const data = await response.json();
-      setHoveredTheme({ id: themeID, article_id: article_id, name: data.themeName });
-    } catch (error) {
-      setHoveredTheme({ id: themeID, name: "Theme not found" });
-    }
+  const handleMouseEnter = (themeID, article_id) => {
+    setHoveredTheme({ id: themeID, article_id });
   };
 
   const handleMouseLeave = () => {
-    setHoveredTheme({ id: null, name: "" });
+    setHoveredTheme({ id: null, article_id: null });
   };
 
   const toggleResume = (index) => {
@@ -186,9 +181,9 @@ export default function ArticlesTable() {
                 </div>
                 <input
                   type="text"
-                  placeholder={language === "fr" ? "Rechercher par titre ou auteur..." : "Search by title or author..."}
+                  placeholder={language === "fr" ? "Rechercher par titre, auteur ou code..." : "Search by title, author or code..."}
                   value={searchQuery}
-                  onChange={(e) => handleSearch(e, articles, setSearchQuery, setFilteredArticles)}
+                  onChange={(e) => handleSearch(e, articles, setSearchQuery, setFilteredArticles, themeMap)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-all duration-200"
                 />
               </div>
@@ -219,8 +214,8 @@ export default function ArticlesTable() {
                         {getSortIcon("annee")}
                       </div>
                     </th>
-                    <th 
-                      className="px-4 py-4 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-blue-700 transition-colors hidden sm:table-cell"
+                    <th
+                      className="px-4 py-4 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-blue-700 transition-colors hidden sm:table-cell w-32"
                       onClick={() => handleSort("theme", sortConfig, setSortConfig, filteredArticles, setFilteredArticles)}
                     >
                       <div className="flex items-center gap-2">
@@ -251,15 +246,15 @@ export default function ArticlesTable() {
                       <td className="px-4 py-4 text-sm text-gray-700 font-medium">{article.annee}</td>
                       <td
                         className="px-4 py-4 text-sm text-gray-700 hidden sm:table-cell relative cursor-help"
-                        onMouseEnter={() => handleMouseEnter(article.theme, article.article_id, article.annee)}
+                        onMouseEnter={() => handleMouseEnter(article.theme, article.article_id)}
                         onMouseLeave={handleMouseLeave}
                       >
-                        <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                          {article.theme}
+                        <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium whitespace-nowrap">
+                          {themeMap[article.theme]?.themeCode || article.theme}
                         </span>
                         {hoveredTheme.id === article.theme && hoveredTheme.article_id === article.article_id && (
                           <div className="absolute z-10 bg-blue-600 text-white p-3 rounded-lg shadow-xl text-sm font-medium -left-2 top-12 w-48 animate-fade-in">
-                            {hoveredTheme.name}
+                            {themeMap[article.theme]?.themeName || (language === "fr" ? "Thème introuvable" : "Theme not found")}
                             <div className="absolute -top-2 left-4 w-4 h-4 bg-blue-600 transform rotate-45"></div>
                           </div>
                         )}

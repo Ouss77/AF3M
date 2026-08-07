@@ -76,9 +76,23 @@ export default function ajouterArticle() {
       const result = await response.json();
 
       if (result.success) {
-        setSuccessMessage("Articles added from the Excel file!");
+        setSuccessMessage(
+          result.message || `${result.inserted_rows} article(s) importé(s) avec succès !`
+        );
       } else {
-        alert(result.error || "Error uploading the file");
+        alert(
+          result.error ||
+            result.message ||
+            "Aucun article n'a été importé."
+        );
+      }
+
+      if (result.row_issues && result.row_issues.length > 0) {
+        console.warn("Lignes ignorées lors de l'import Excel:", result.row_issues);
+        alert(
+          "Certaines lignes n'ont pas été importées :\n\n" +
+            result.row_issues.join("\n")
+        );
       }
     } catch (error) {
       console.error("Error uploading the file:", error);

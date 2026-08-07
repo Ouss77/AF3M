@@ -7,6 +7,7 @@ function ajouterTheme() {
     const router = useRouter();
     const [themeNumber, setThemeNumber] = useState("");
     const [themeName, setThemeName] = useState("");
+    const [themeCode, setThemeCode] = useState("");
     const [annee, setAnnee] = useState(new Date().getFullYear());
     const [themes, setThemes] = useState([]);
     const [message, setMessage] = useState({ text: "", type: "" });
@@ -21,6 +22,10 @@ function ajouterTheme() {
             setMessage({ text: "Le nom du thème est requis", type: "error" });
             return;
         }
+        if (!themeCode.trim()) {
+            setMessage({ text: "Le code du thème est requis", type: "error" });
+            return;
+        }
         if (!annee) {
             setMessage({ text: "L'année est requise", type: "error" });
             return;
@@ -32,12 +37,14 @@ function ajouterTheme() {
                 {
                     themeID: themeNumber,
                     themeName: themeName,
+                    themeCode: themeCode,
                     annee: annee
                 }
             );
-            setThemes([...themes, { themeNumber, themeName, annee }]);
+            setThemes([...themes, { themeNumber, themeName, themeCode, annee }]);
             setThemeNumber("");
             setThemeName("");
+            setThemeCode("");
             setAnnee(new Date().getFullYear());
             setMessage({ text: "Thème ajouté avec succès", type: "success" });
             setTimeout(() => {
@@ -124,6 +131,20 @@ function ajouterTheme() {
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                Code du Thème
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Entrez le code du thème..."
+                                className="w-full border border-gray-300 rounded-xl px-4 py-4 text-lg bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 hover:border-purple-300"
+                                value={themeCode}
+                                onChange={e => setThemeCode(e.target.value)}
+                                disabled={isLoading}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-3">
                                 Année
                             </label>
                             <input
@@ -139,7 +160,7 @@ function ajouterTheme() {
                         </div>
                         <button 
                             onClick={addTheme}
-                            disabled={isLoading || !themeName.trim() || !annee}
+                            disabled={isLoading || !themeName.trim() || !themeCode.trim() || !annee}
                             className="w-full group relative px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl hover:from-purple-600 hover:to-pink-700 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center text-lg font-semibold"
                         >
                             {isLoading ? (

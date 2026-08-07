@@ -2,6 +2,7 @@
 import Loading from "@/components/Loading";
 import React, { useEffect, useState } from "react";
 import { fetchArticles, handleSearch } from "@/utils/articleUtils";
+import { fetchThemes, buildThemeMap } from "@/utils/themeUtils";
 
 export default function ModifierArticle() {
   const [articles, setArticles] = useState([]); // All articles from API
@@ -11,9 +12,11 @@ export default function ModifierArticle() {
   const [searchQuery, setSearchQuery] = useState(""); // Search input state
   const [activeResume, setActiveResume] = useState(null); // Track active resume to toggle visibility
   const [message, setMessage] = useState(""); // Message state for success/error messages
-  
+  const [themeMap, setThemeMap] = useState({});
+
   useEffect(() => {
     fetchArticles(setArticles, setFilteredArticles, setLoading);
+    fetchThemes().then((themes) => setThemeMap(buildThemeMap(themes))).catch(() => {});
   }, []);
 
   const handleDelete = async (articleId) => {
@@ -103,10 +106,10 @@ export default function ModifierArticle() {
               </div>
               <input
                 type="text"
-                placeholder="Rechercher par titre ou auteur..."
+                placeholder="Rechercher par titre, auteur ou code..."
                 value={searchQuery}
                 onChange={(e) =>
-                  handleSearch(e, articles, setSearchQuery, setFilteredArticles)
+                  handleSearch(e, articles, setSearchQuery, setFilteredArticles, themeMap)
                 }
                 className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl bg-slate-50/50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 outline-none text-slate-800 placeholder-slate-400"
               />
@@ -152,7 +155,7 @@ export default function ModifierArticle() {
               </thead>
 <tbody className="divide-y divide-slate-200">
   {filteredArticles.map((article, index) => {
-    const theme = article.theme || "";
+    const theme = themeMap[article.theme]?.themeCode || article.theme || "";
     const titre = article.titre || "";
     const resume = article.resume || "";
     const authors = article.authors || "";
@@ -245,7 +248,7 @@ export default function ModifierArticle() {
                       {article.annee}
                     </span>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                      {article.theme}
+                      {themeMap[article.theme]?.themeCode || article.theme}
                     </span>
                   </div>
                 </div>

@@ -1,13 +1,17 @@
-export const handleSearch = (e, articles, setSearchQuery, setFilteredArticles) => {
+export const handleSearch = (e, articles, setSearchQuery, setFilteredArticles, themeMap = {}) => {
     const query = e.target.value;
     setSearchQuery(query);
-  
-    const filteredArticles = articles.filter(
-      (article) =>
-        article.titre.toLowerCase().includes(query.toLowerCase()) ||
-        article.authors.toLowerCase().includes(query.toLowerCase())
-    );
-  
+    const q = query.toLowerCase();
+
+    const filteredArticles = articles.filter((article) => {
+      const themeCode = themeMap[article.theme]?.themeCode || "";
+      return (
+        article.titre.toLowerCase().includes(q) ||
+        article.authors.toLowerCase().includes(q) ||
+        themeCode.toLowerCase().includes(q)
+      );
+    });
+
     setFilteredArticles(filteredArticles);
   };
 

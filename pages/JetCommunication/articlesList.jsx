@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "@/components/Context/LanguageContext";
 import { fetchArticles, handleSearch, handleYearChange } from "@/utils/articleUtils";
+import { fetchThemes, buildThemeMap } from "@/utils/themeUtils";
 import { FaSearch, FaDownload, FaTable, FaCalendarAlt, FaBook, FaUser, FaChevronDown, FaChevronUp, FaTag } from "react-icons/fa";
 
 export default function ArticlesTable() {
@@ -14,10 +15,12 @@ export default function ArticlesTable() {
   const [selectedYear, setSelectedYear] = useState("All");
   const [downloadError, setDownloadError] = useState({});
   const [downloadLoading, setDownloadLoading] = useState({});
+  const [themeMap, setThemeMap] = useState({});
   const { language } = useContext(LanguageContext);
 
   useEffect(() => {
     fetchArticles(setArticles, setFilteredArticles, setLoading, setError);
+    fetchThemes().then((themes) => setThemeMap(buildThemeMap(themes))).catch(() => {});
   }, []);
 
   const handleDownload = async (event, fileName) => {
@@ -144,9 +147,9 @@ export default function ArticlesTable() {
               </div>
               <input
                 type="text"
-                placeholder={language === "fr" ? "Rechercher par titre ou auteur..." : "Search by title or author..."}
+                placeholder={language === "fr" ? "Rechercher par titre, auteur ou code..." : "Search by title, author or code..."}
                 value={searchQuery}
-                onChange={(e) => handleSearch(e, articles, setSearchQuery, setFilteredArticles)}
+                onChange={(e) => handleSearch(e, articles, setSearchQuery, setFilteredArticles, themeMap)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-all duration-200"
               />
             </div>
@@ -193,7 +196,7 @@ export default function ArticlesTable() {
                     <FaTag className="w-4 h-4 text-purple-500" />
                     <span className="font-medium">{language === "fr" ? "Thème:" : "Theme:"}</span>
                     <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">
-                      {article.theme}
+                      {themeMap[article.theme]?.themeCode || article.theme}
                     </span>
                   </div>
                 </div>
