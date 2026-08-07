@@ -27,7 +27,8 @@ export default function CarouselActualite() {
     fetchActualites();
   }, []);
 
-  const lastThreeActualites = actualites.slice(-3);
+  // Backend returns actualites pre-sorted by sort_order (admin-defined order)
+  const lastThreeActualites = actualites.slice(0, 3);
 
   const handleNext = () => {
     setCurrentIndex(
@@ -61,7 +62,7 @@ export default function CarouselActualite() {
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 mt-24 sm:mt-32">
         {/* Main Carousel Container */}
         <div
-          className="relative w-full h-[400px] lg:h-[550px] rounded-3xl overflow-hidden shadow-2xl"
+          className="relative w-full h-[400px] lg:h-[550px] rounded-3xl overflow-hidden"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -83,23 +84,21 @@ export default function CarouselActualite() {
                   className="object-cover"
                   priority={index === 0}
                 />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
               </div>
 
               {/* Content Container */}
               <div className="relative h-full flex flex-col justify-end p-6 sm:p-10 lg:p-14">
                 {/* Title */}
                 <div className="mb-4 transform transition-transform duration-700">
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 leading-tight drop-shadow-lg">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
                     {language === "fr" ? item.title_fr : item.title_en}
                   </h2>
                   <div className="w-24 h-1 bg-yellow-500 rounded-full" />
                 </div>
 
                 {/* Description */}
-                <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 sm:p-8 border border-white/20 max-w-3xl">
-                  <p className="text-base sm:text-lg lg:text-xl text-white/95 leading-relaxed">
+                <div className="p-6 sm:p-8 max-w-3xl">
+                  <p className="text-base sm:text-lg lg:text-xl text-white leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
                     {language === "fr" ? item.description_fr : item.description_en}
                   </p>
                 </div>

@@ -1,8 +1,10 @@
 "use client";
 import { LanguageContext } from '@/components/Context/LanguageContext';
 import Loading from '@/components/Loading';
-import React, { useContext, useEffect, useState } from "react";
-import { fetchActualites } from '@/utils/actualitesUtils';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Reorder, useDragControls } from "framer-motion";
+import { GripVertical } from "lucide-react";
+import { fetchActualites, updateOrdreActualites } from '@/utils/actualitesUtils';
 
 export default function Actualites() {
   const language = useContext(LanguageContext);
@@ -11,6 +13,7 @@ export default function Actualites() {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
   const [visibleDescription, setVisibleDescription] = useState(null);
+  const orderSaveTimeout = useRef(null);
 
   const toggleDescription = (id) => {
     setVisibleDescription(visibleDescription === id ? null : id);
@@ -19,6 +22,25 @@ export default function Actualites() {
   useEffect(() => {
     fetchActualites(setActualites, setLoading, setError);
   }, []);
+
+  useEffect(() => {
+    return () => clearTimeout(orderSaveTimeout.current);
+  }, []);
+
+  const persistOrder = async (orderedActualites) => {
+    try {
+      await updateOrdreActualites(orderedActualites.map((item) => item.id));
+      setMessage(language === "fr" ? "Ordre sauvegardé !" : "Order saved!");
+    } catch (err) {
+      setMessage((language === "fr" ? "Erreur: " : "Error: ") + err.message);
+    }
+  };
+
+  const handleReorder = (newOrder) => {
+    setActualites(newOrder);
+    clearTimeout(orderSaveTimeout.current);
+    orderSaveTimeout.current = setTimeout(() => persistOrder(newOrder), 600);
+  };
 
 
 
@@ -129,13 +151,73 @@ export default function Actualites() {
           </button>
         </div>
 
+        {/* Reorder hint */}
+        {actualites.length > 1 && (
+          <p className="text-sm text-slate-500 mb-4 flex items-center gap-2">
+            <GripVertical className="w-4 h-4" />
+            {language === "fr"
+              ? "Glissez les actualités par la poignée pour changer leur ordre d'affichage dans la carrousel."
+              : "Drag news items by the handle to change their display order in the carousel."}
+          </p>
+        )}
+
         {/* News Cards */}
-        <div className="space-y-6">
+        <Reorder.Group axis="y" values={actualites} onReorder={handleReorder} className="space-y-6">
           {actualites.map((item) => (
-            <div key={item.id} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300">
-              <div className="flex flex-col lg:flex-row">
-                {/* Image Section */}
-                {item.image_url && (
+            <ActualiteCard
+              key={item.id}
+              item={item}
+              language={language}
+              visibleDescription={visibleDescription}
+              toggleDescription={toggleDescription}
+              handleDelete={handleDelete}
+            />
+          ))}
+
+          {/* Empty State */}
+          {actualites.length === 0 && (
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
+              <svg className="w-16 h-16 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path>
+              </svg>
+              <h3 className="text-lg font-medium text-slate-600 mb-2">
+                {language === "fr" ? "Aucune actualité trouvée" : "No news found"}
+              </h3>
+              <p className="text-slate-400">
+                {language === "fr" ? "Commencez par ajouter votre première actualité" : "Start by adding your first news article"}
+              </p>
+            </div>
+          )}
+        </Reorder.Group>
+      </div>
+    </div>
+  );
+}
+
+function ActualiteCard({ item, language, visibleDescription, toggleDescription, handleDelete }) {
+  const dragControls = useDragControls();
+
+  return (
+    <Reorder.Item
+      value={item}
+      dragListener={false}
+      dragControls={dragControls}
+      as="div"
+      className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300"
+    >
+      <div className="flex flex-col lg:flex-row">
+        {/* Drag Handle */}
+        <button
+          type="button"
+          aria-label={language === "fr" ? "Réorganiser" : "Reorder"}
+          onPointerDown={(e) => dragControls.start(e)}
+          className="hidden lg:flex items-center justify-center w-10 flex-shrink-0 cursor-grab active:cursor-grabbing touch-none text-slate-300 hover:text-slate-500 transition-colors"
+        >
+          <GripVertical className="w-5 h-5" />
+        </button>
+
+        {/* Image Section */}
+        {item.image_url && (
                   <div className="lg:w-64 lg:flex-shrink-0">
                     <img
                       src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${item.image_url}`}
@@ -211,25 +293,6 @@ export default function Actualites() {
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-
-          {/* Empty State */}
-          {actualites.length === 0 && (
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
-              <svg className="w-16 h-16 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path>
-              </svg>
-              <h3 className="text-lg font-medium text-slate-600 mb-2">
-                {language === "fr" ? "Aucune actualité trouvée" : "No news found"}
-              </h3>
-              <p className="text-slate-400">
-                {language === "fr" ? "Commencez par ajouter votre première actualité" : "Start by adding your first news article"}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    </Reorder.Item>
   );
 }
