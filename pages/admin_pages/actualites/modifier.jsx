@@ -17,6 +17,10 @@ export default function ModifierActualite() {
   const [titleEn, setTitleEn] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
   const [image, setImage] = useState(null);
+  const [initialTitleFr, setInitialTitleFr] = useState("");
+  const [initialDescriptionFr, setInitialDescriptionFr] = useState("");
+  const [initialTitleEn, setInitialTitleEn] = useState("");
+  const [initialDescriptionEn, setInitialDescriptionEn] = useState("");
   const [message, setMessage] = useState("");
   const [currentImageUrl, setCurrentImageUrl] = useState("");
 
@@ -42,12 +46,31 @@ export default function ModifierActualite() {
     setTitleEn(currentActualite.title_en || "");
     setDescriptionEn(currentActualite.description_en || "");
     setCurrentImageUrl(currentActualite.image_url || "");
+    // store initial values for client-side change detection
+    setInitialTitleFr(currentActualite.title_fr || "");
+    setInitialDescriptionFr(currentActualite.description_fr || "");
+    setInitialTitleEn(currentActualite.title_en || "");
+    setInitialDescriptionEn(currentActualite.description_en || "");
   }, [currentActualite]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!id) {
       setMessage("ID manquant.");
+      return;
+    }
+
+    // Client-side check: if nothing changed, avoid sending request
+    const imageChanged = !!image; // new file selected
+    const nothingChanged =
+      titleFr === initialTitleFr &&
+      descriptionFr === initialDescriptionFr &&
+      titleEn === initialTitleEn &&
+      descriptionEn === initialDescriptionEn &&
+      !imageChanged;
+
+    if (nothingChanged) {
+      setMessage("Rien à modifier");
       return;
     }
 
@@ -67,13 +90,27 @@ export default function ModifierActualite() {
         body: formData,
       });
 
-      if (response.ok) {
-        setMessage("Actualité mise à jour avec succès !");
+      let data = null;
+      let text = null;
+      try {
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          text = await response.text();
+        }
+      } catch (parseErr) {
+        text = await response.text().catch(() => null);
+      }
+
+      if (response.ok && data && data.success) {
+        setMessage(data.message || "Actualité mise à jour avec succès !");
         await new Promise((resolve) => setTimeout(resolve, 2000));
         router.push("/admin_pages/actualites");
       } else {
-        const err = await response.json();
-        setMessage(err.message || "Une erreur est survenue.");
+        // Prefer backend JSON message, then plain text, then generic
+        const serverMsg = (data && data.message) || text;
+        setMessage(serverMsg || `Une erreur est survenue (code ${response.status})`);
       }
     } catch (err) {
       setMessage("Erreur lors de la mise à jour.");
