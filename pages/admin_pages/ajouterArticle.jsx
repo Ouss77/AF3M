@@ -38,7 +38,7 @@ export default function ajouterArticle() {
     e.preventDefault();
     console.log(process.env.NEXT_PUBLIC_API_BASE_URL)
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ajouter_article.php`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/articles/ajouter_article.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -68,7 +68,7 @@ export default function ajouterArticle() {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/upload_excel.php`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/articles/upload_excel.php`, {
         method: "POST",
         body: formData,
       });

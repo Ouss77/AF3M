@@ -46,7 +46,7 @@ export default function AllActualites() {
           {language === "fr" ? "Toutes les actualités" : "All the News"}  
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {actualites.slice().reverse().map((item, index) => (
+          {actualites.slice().sort((a, b) => b.id - a.id).map((item, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: 100 }} // Starts off-screen to the right

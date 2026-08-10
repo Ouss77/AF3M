@@ -13,7 +13,7 @@ const ArticleChart = () => {
     // Fetch articles from your API
     const fetchArticles = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/getArticles_locally.php`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/articles/getArticles_locally.php`);
         const articles = await response.json();
 
         const yearCount = articles.reduce((acc, article) => {
@@ -60,8 +60,8 @@ const ArticleChart = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div style={{ width: '100%', height: '400px' }}>
-      <Line data={chartData} />
+    <div className="w-full h-56 sm:h-72 lg:h-80">
+      <Line data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
     </div>
   );
 };

@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }) {
         {isAdminPage && isAdmin ? (
           <>
             <SideBar />
-            <div className="flex-1 lg:ml-80 ml-0 transition-all duration-300">
+            <div className="flex-1 min-w-0 lg:pl-80 transition-all duration-300">
               <div className="p-6">
                 <Component {...pageProps} />
               </div>

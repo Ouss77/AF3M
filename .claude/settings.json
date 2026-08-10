@@ -2,7 +2,32 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/sousou/Desktop/**)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(node -e \"console.log\\(require.resolve\\('playwright'\\)\\)\")",
+      "Bash(npm ls *)",
+      "Bash(node -e \"require.resolve\\('playwright-core'\\)\")",
+      "Bash(npx --no-install playwright --version)",
+      "Bash(mkdir -p 'C:\\\\Users\\\\sousou\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--IT-Projects-Amine-Work-EMI-amine-projet-association-mater\\\\fbb8c0ea-1772-4697-9520-0529eb8297e0\\\\scratchpad')",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(node shot.js)",
+      "Read(//c/Users/sousou/AppData/Local/ms-playwright/**)",
+      "Bash(npx --yes playwright install chromium --with-deps)",
+      "Bash(npm root *)",
+      "Bash(NODE_PATH=\"C:/Users/sousou/AppData/Local/npm-cache/_npx/e41f203b7505f1fb/node_modules\" node screenshot.js)",
+      "Bash(curl -sf -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000)",
+      "Bash(node -e \"console.log\\(require\\('playwright-core/package.json'\\).version\\)\")",
+      "Bash(node \"C:\\\\Users\\\\sousou\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--IT-Projects-Amine-Work-EMI-amine-projet-association-mater\\\\fbb8c0ea-1772-4697-9520-0529eb8297e0\\\\scratchpad\\\\check.js\")",
+      "Bash(node \"C:\\\\Users\\\\sousou\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--IT-Projects-Amine-Work-EMI-amine-projet-association-mater\\\\fbb8c0ea-1772-4697-9520-0529eb8297e0\\\\scratchpad\\\\check_actualites.js\")",
+      "Bash(node \"C:\\\\Users\\\\sousou\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--IT-Projects-Amine-Work-EMI-amine-projet-association-mater\\\\fbb8c0ea-1772-4697-9520-0529eb8297e0\\\\scratchpad\\\\stability.js\")",
+      "Bash(node \"C:\\\\Users\\\\sousou\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--IT-Projects-Amine-Work-EMI-amine-projet-association-mater\\\\fbb8c0ea-1772-4697-9520-0529eb8297e0\\\\scratchpad\\\\final_shot2.js\")",
+      "Bash(curl -sf http://localhost:3000 -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(node \"C:\\\\Users\\\\sousou\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--IT-Projects-Amine-Work-EMI-amine-projet-association-mater\\\\fbb8c0ea-1772-4697-9520-0529eb8297e0\\\\scratchpad\\\\check_page.js\")",
+      "Bash(command -v chromium-cli)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(curl -sf http://localhost:3000 -o /dev/null -w \"status: %{http_code}\\\\n\" --max-time 5)",
+      "Bash(node \"C:/Users/sousou/AppData/Local/Temp/claude/d--IT-Projects-Amine-Work-EMI-amine-projet-association-mater/fbb8c0ea-1772-4697-9520-0529eb8297e0/scratchpad/check_pages.js\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\sousou\\Desktop"
