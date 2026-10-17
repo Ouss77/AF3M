@@ -1,25 +1,76 @@
-#SQL database password: 1963
+# AF3M
 
-#1	Conception & Optimisation / Allègement / Durée de Vie et contrôle d’intégrité
-2	Matériaux & Procédés d’élaboration / Recyclage et Cycle de Vie
-3	T03 Energies Renouvelables / Economie d’énergie / surveillance intelligentes des équipe- ments, Intelligence Artificielle
-4	T04 Matériaux bio-sourcés/Eco-matériaux/Eco-Conception
-5	T05 Hydrogène en production, stockage, transport et conversion 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+AF3M est un projet Next.js portant sur (à compléter selon le scope réel du projet) la recherche et le développement autour de :
+- Conception & optimisation, durée de vie et contrôle d’intégrité
+- Matériaux & procédés d’élaboration, recyclage et cycle de vie
+- Énergies renouvelables, économie d’énergie et supervision intelligente (IA)
+- Matériaux bio-sourcés / éco-matériaux / éco-conception
+- Hydrogène (production, stockage, transport, conversion)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ce README décrit comment installer, configurer, développer et déployer le projet.
 
-## Learn More
+## Table des matières
+- [Fonctionnalités](#fonctionnalités)
+- [Stack technique](#stack-technique)
+- [Prérequis](#prérequis)
+- [Installation et lancement en local](#installation-et-lancement-en-local)
+- [Configuration (variables d'environnement)](#configuration-variables-denvironnement)
+- [Base de données](#base-de-données)
+- [Structure du projet](#structure-du-projet)
+- [Développement](#développement)
+- [Tests](#tests)
+- [Déploiement](#déploiement)
+- [Sécurité & bonnes pratiques](#sécurité--bonnes-pratiques)
+- [Contribuer](#contribuer)
+- [Licence & contact](#licence--contact)
 
-To learn more about Next.js, take a look at the following resources:
+## Fonctionnalités
+Liste non exhaustive :  
+- Interface web construite avec Next.js (app router)
+- Pages dynamiques et optimisées
+- Intégration des polices optimisées via `next/font`
+- Points d'entrée pour modules d'analyse/IA et surveillance d'équipements
+- Structure prévue pour intégrer une base de données SQL
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Remarque : adapte cette section pour lister les fonctionnalités réelles (API exposées, endpoints, modules IA, tableaux de bord...).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stack technique
+- Frontend : Next.js (App Router)
+- Langage : JavaScript ou TypeScript (selon le projet)
+- Hébergement recommandé : Vercel
+- Base de données : SQL (Postgres / MySQL / SQLite — selon ta configuration)
+- Outils : npm / pnpm / yarn, ESLint, Prettier (à ajouter si souhaité)
 
-## Deploy on Vercel
+## Prérequis
+- Node.js (version LTS recommandée, ex. 18+)
+- npm ou yarn
+- Accès à une base de données SQL (Postgres/MySQL) si utilisation en local
+- Compte Vercel pour déploiement (optionnel)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Installation et lancement en local
+1. Cloner le dépôt
+   git clone https://github.com/Ouss77/AF3M.git
+2. Se placer dans le dossier du projet
+   cd AF3M
+3. Installer les dépendances
+   npm install
+   # ou
+   yarn install
+4. Créer un fichier d'environnement (voir ci-dessous)
+5. Lancer le serveur de développement
+   npm run dev
+   # ou
+   yarn dev
+6. Ouvrir http://localhost:3000
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Configuration (variables d'environnement)
+Crée un fichier `.env.local` (ne committe jamais tes secrets). Exemple `.env.example` :
+
+```env
+# .env.example
+NODE_ENV=development
+PORT=3000
+DATABASE_URL=postgres://user:password@localhost:5432/af3m_db
+NEXTAUTH_URL=http://localhost:3000
+JWT_SECRET=ton_secret_jwt_long
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
